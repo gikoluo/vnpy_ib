@@ -724,7 +724,7 @@ class IbApi(EWrapper):
         super().execDetails(reqId, contract, execution)
 
         time_str: str = execution.time
-        time_split: list = time_str.split(" ")
+        time_split: list = time_str.split()
         words_count: int = 3
 
         if len(time_split) == words_count:
@@ -773,7 +773,7 @@ class IbApi(EWrapper):
         """历史数据更新回报"""
         # 日级别数据和周级别日期数据的数据形式为%Y%m%d
         time_str: str = ib_bar.date
-        time_split: list = time_str.split(" ")
+        time_split: list = time_str.split()
         words_count: int = 3
 
         if ":" not in time_str:

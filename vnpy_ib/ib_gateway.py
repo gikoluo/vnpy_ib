@@ -677,7 +677,7 @@ class IbApi(EWrapper):
             product=PRODUCT_IB2VT[ib_contract.secType],
             size=float(ib_contract.multiplier),
             pricetick=contractDetails.minTick,
-            min_volume=contractDetails.get("minSize", 1),
+            min_volume=getattr(contractDetails, "minSize", 1),
             net_position=True,
             history_data=True,
             stop_supported=True,

@@ -668,6 +668,11 @@ class IbApi(EWrapper):
         product: Product = PRODUCT_IB2VT.get(ib_contract.secType, None)
         if not product:
             return
+        
+        if contractDetails.min_volume > 0:
+            min_volume = contractDetails.min_volume
+        else:
+            min_volume = 1
 
         # 生成合约
         contract: ContractData = ContractData(
@@ -677,7 +682,7 @@ class IbApi(EWrapper):
             product=PRODUCT_IB2VT[ib_contract.secType],
             size=float(ib_contract.multiplier),
             pricetick=contractDetails.minTick,
-            min_volume=getattr(contractDetails, "minSize", 1),
+            min_volume=min_volume,
             net_position=True,
             history_data=True,
             stop_supported=True,
@@ -964,7 +969,11 @@ class IbApi(EWrapper):
         ib_order.totalQuantity = Decimal(req.volume)
         ib_order.account = self.account
         ib_order.orderRef = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
+        ib_order.eTradeOnly = False
+        ib_order.firmQuoteOnly = False
+        ib_order.min_qty = 1
+        
+        
         if req.type == OrderType.LIMIT:
             ib_order.lmtPrice = req.price
         elif req.type == OrderType.STOP:
@@ -983,7 +992,7 @@ class IbApi(EWrapper):
         if not self.status:
             return
 
-        self.client.cancelOrder(int(req.orderid), "")
+        self.client.cancelOrder(int(req.orderid))
 
     def query_history(self, req: HistoryRequest) -> list[BarData]:
         """查询历史数据"""

@@ -669,10 +669,7 @@ class IbApi(EWrapper):
         if not product:
             return
         
-        if contractDetails.min_volume > 0:
-            min_volume = contractDetails.min_volume
-        else:
-            min_volume = 1
+        min_volume = getattr(contractDetails, "min_volume", 1)
 
         # 生成合约
         contract: ContractData = ContractData(

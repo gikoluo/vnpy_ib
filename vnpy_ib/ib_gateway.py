@@ -541,9 +541,12 @@ class IbApi(EWrapper):
         super().openOrder(orderId, ib_contract, ib_order, orderState)
 
         orderid: str = str(orderId)
-
+        
         if ib_order.orderRef:
-            dt: datetime = datetime.strptime(ib_order.orderRef, "%Y-%m-%d %H:%M:%S")
+            try:
+                dt: datetime = datetime.strptime(ib_order.orderRef, "%Y-%m-%d %H:%M:%S")
+            except ValueError:
+                dt: datetime = datetime.now()
         else:
             dt: datetime = datetime.now()
 

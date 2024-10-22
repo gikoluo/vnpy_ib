@@ -985,6 +985,7 @@ class IbApi(EWrapper):
         ib_order.eTradeOnly = False
         ib_order.firmQuoteOnly = False
         ib_order.min_qty = 1
+        ib_order.transmit = False
         
         
         if req.type == OrderType.LIMIT:
